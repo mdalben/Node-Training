@@ -1,0 +1,11 @@
+{
+  "name": "app3",
+  "version": "1.0.0",
+  "description": "serve static content with express",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Michele Dal Ben",
+  "license": "ISC"
+}
