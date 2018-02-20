@@ -1,0 +1,19 @@
+{
+  "name": "node-training",
+  "version": "1.0.0",
+  "description": "This is a training project with NodeJs and Typescript",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mdalben/Node-Training.git"
+  },
+  "author": "Michele Dal Ben",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mdalben/Node-Training/issues"
+  },
+  "homepage": "https://github.com/mdalben/Node-Training#readme"
+}
