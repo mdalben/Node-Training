@@ -13,7 +13,7 @@
     "ts-node": "^5.0.0"
   },
   "dependencies": {
-    "nodemon": "^1.15.1",
+    "@types/node": "^9.4.6",
     "typescript": "^2.7.2"
   }
 }
