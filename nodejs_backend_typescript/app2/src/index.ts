@@ -1,7 +1,7 @@
 import * as express from 'express'
 
-let app = express()
-let PORT = 5000
+const app = express()
+const PORT = 5000
 
 app.use(express.json())
 
@@ -14,7 +14,7 @@ app.get('/', function(request : express.Request, response : express.Response) {
 })
 
 app.get('/user', function(request : express.Request, response : express.Response) {
-    let user = {
+    const user = {
         'name' : 'John',
         'surname' : 'Smith',
         'age' : 43,
@@ -29,7 +29,7 @@ app.put('/user', function(request : express.Request, response : express.Response
     if (!request.body) {
         next('No user to add')
     } else {
-        let { name, surname, age, job} = request.body
+        const { name, surname, age, job} = request.body
         response.send({
             user : {
                 name,
@@ -45,7 +45,7 @@ app.post('/user', function(request : express.Request, response : express.Respons
     if (!request.body)
         next('No user to update')
     else {
-        let user = request.body
+        const user = request.body
         user.name = 'John'
         user.surname = 'Smith'
         user.age = 43

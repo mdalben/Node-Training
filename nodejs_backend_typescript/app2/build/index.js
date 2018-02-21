@@ -6,7 +6,7 @@ var PORT = 5000;
 app.use(express.json());
 app.set('port', PORT);
 app.get('/', function (request, response) {
-    response.send('Hello World!')
+    response.send('Hello World from express ts!')
         .status(200)
         .end();
 });
