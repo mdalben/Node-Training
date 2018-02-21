@@ -1,7 +1,7 @@
 import * as http from "http"
 
-let app = new http.Server()
-let PORT = 5000
+const app = new http.Server()
+const PORT = 5000
 
 app.on('request', function(request : http.ServerRequest, response : http.ServerResponse) {
     response.writeHead(200, {'Content-type' : 'text-plain'})
