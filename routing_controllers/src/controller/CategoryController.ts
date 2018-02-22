@@ -16,5 +16,19 @@ export class CategoryController {
         return this.categoryRepository.findAll()
     }
 
-    
+    @Get('/categories/:id')
+    one(@Param('id') id: number) {
+        return this.categoryRepository.findOne(id)
+    }
+
+    @Post('/categories')
+    category(@Body() category: Category) : Category {
+        return this.categoryRepository.save(category)
+    }
+
+    @Delete('/categories/:id')
+    delete(@Param('id') id: number) : Category {
+        return this.categoryRepository.remove(id)
+    }
+
 }

@@ -34,8 +34,8 @@ export class CategoryRepository {
     remove(id: number) : Category {
         let category = this.findOne(id)
         if (category)
-            this.categories.slice(this.categories.indexOf(category), 1)
+            this.categories.splice(this.categories.indexOf(category), 1)
         return category
     }
-    
+
 }
