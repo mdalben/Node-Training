@@ -2,6 +2,7 @@ import "reflect-metadata";
 import {createExpressServer, useContainer, useExpressServer} from "routing-controllers";
 import {Container} from "typedi";
 import {CategoryController} from "./controller/CategoryController";
+import { PostController } from "./controller/PostController";
 
 const PORT = 5000
 
@@ -18,7 +19,8 @@ const expressApp = createExpressServer({
      * Setup own routing-controller to register on our express server.
      */
     controllers: [
-        CategoryController
+        CategoryController,
+        PostController
     ]
 })
 
