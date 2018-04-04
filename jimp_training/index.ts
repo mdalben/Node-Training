@@ -14,15 +14,14 @@ function isSquare(n: number) {
 }
 
 function extractImages(n: number, imagePath: string) {
-    if (!isPrime(n)) {
         sharp(imagePath).metadata().then((info) => {
             const { width, height } = info;
-            const maxGrid = (isSquare(n)) ? Math.sqrt(n) : (n >= 9 && n % 3 == 0) ? 3 : 2;
+            const maxGrid = (isPrime(n)) ? 1 : (isSquare(n)) ? Math.sqrt(n) : (n >= 9 && n % 3 == 0) ? 3 : 2;
             const columns = (width > (1.5 * height)) ? n / maxGrid : maxGrid;
             const rows = (width > (1.5 * height)) ? maxGrid : n / maxGrid;
             const offW = Math.trunc(width / columns);
             const offH = Math.trunc(height / rows);
-            let jumpH, jumpW = 0;
+            let jumpH = 0, jumpW = 0;
             for (let i = 0; i < n; i++) {
                 if (i % columns === 0 && i !== 0) {
                     jumpH++;
@@ -41,7 +40,6 @@ function extractImages(n: number, imagePath: string) {
         }).catch((error) => {
             throw (error);
         });
-    }
 }
 
 const t0 = (performance.now());
@@ -87,7 +85,7 @@ console.log("sharp extract -> " + (t5 - t4) + "ms");
 
 const t6 = (performance.now());
 
-extractImages(18, "./public/mountains.jpg");
+extractImages(5, "./public/mountains.jpg");
 
 const t7 = performance.now();
 
