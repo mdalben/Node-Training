@@ -1,5 +1,6 @@
 import * as jimp from "jimp";
 const sharp = require("sharp");
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 
 const { performance } = require("perf_hooks");
 
@@ -10,36 +11,38 @@ function isPrime(num: number) {
 }
 
 function isSquare(n: number) {
-    return n > 0 && Math.sqrt(n) % 1 === 0;    
+    return n > 0 && Math.sqrt(n) % 1 === 0;
 }
 
-function extractImages(n: number, imagePath: string) {
-        sharp(imagePath).metadata().then((info) => {
-            const { width, height } = info;
-            const maxGrid = (isPrime(n)) ? 1 : (isSquare(n)) ? Math.sqrt(n) : (n >= 9 && n % 3 == 0) ? 3 : 2;
-            const columns = (width > (1.5 * height)) ? n / maxGrid : maxGrid;
-            const rows = (width > (1.5 * height)) ? maxGrid : n / maxGrid;
-            const offW = Math.trunc(width / columns);
-            const offH = Math.trunc(height / rows);
-            let jumpH = 0, jumpW = 0;
-            for (let i = 0; i < n; i++) {
-                if (i % columns === 0 && i !== 0) {
-                    jumpH++;
-                    jumpW = 0;
-                }
-                sharp(`./public/mountains.jpg`)
-                    .extract({ left: jumpW * offW, top: jumpH * offH, width: offW, height: offH })
-                    .toFile(`./public/mountains${i}.jpg`, (err) => {
-                        if (err) {
-                            console.log(`left: ${jumpW * offW}, top: ${jumpH * offH}, width: ${offW}, heigth: ${offH}`);
-                            throw (err);
-                        }
-                    });
-                jumpW++;
+function extractImages(clients: string[], imagePath: string) {
+    const n = clients.length;
+    sharp(imagePath).metadata().then((info) => {
+        const { width, height } = info;
+        const maxGrid = (isPrime(n)) ? 1 : (isSquare(n)) ? Math.sqrt(n) : (n >= 9 && n % 3 == 0) ? 3 : 2;
+        const columns = (width > (1.5 * height)) ? n / maxGrid : maxGrid;
+        const rows = (width > (1.5 * height)) ? maxGrid : n / maxGrid;
+        const offW = Math.trunc(width / columns);
+        const offH = Math.trunc(height / rows);
+        let jumpH = 0, jumpW = 0;
+        for (let i = 0; i < n; i++) {
+            if (i % columns === 0 && i !== 0) {
+                jumpH++;
+                jumpW = 0;
             }
-        }).catch((error) => {
-            throw (error);
-        });
+            sharp(imagePath)
+                .extract({ left: jumpW * offW, top: jumpH * offH, width: offW, height: offH })
+                .toFile(`./public/mountains${i}.jpg`, (err) => {
+                    if (err) {
+                        console.log(`left: ${jumpW * offW}, top: ${jumpH * offH}, width: ${offW}, heigth: ${offH}`);
+                        throw (err);
+                    }
+                });
+            console.log(`file ./public/mountains${i}.jpg is for socket ${clients[i]}`);
+            jumpW++;
+        }
+    }).catch((error) => {
+        throw (error);
+    });
 }
 
 const t0 = (performance.now());
@@ -85,8 +88,17 @@ console.log("sharp extract -> " + (t5 - t4) + "ms");
 
 const t6 = (performance.now());
 
-extractImages(5, "./public/mountains.jpg");
+const clients: string[] = ["wgvZS", "T3Ika", "1QPG6", "FxI2z", "MPYma", "DUXC2", "IAyis", "oqa0n", "T3YRG", "3mq8W"];
+
+// extractImages(clients, "https://localhost:8045/mountains.jpg");
 
 const t7 = performance.now();
+
+var request = require('request').defaults({ encoding: null });
+request("https://localhost:8045/mou/login", (err, res, body) => {
+    if (!err) {
+        extractImages(clients, body);
+    } else console.log(err);
+});
 
 console.log("extract images -> " + (t7 - t6) + "ms");
