@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "declaration": true,
+        "outDir": "build",
+        "module": "commonjs"
+    },
+    "exclude": [
+        "node_modules",
+        "build",
+        "uploads"
+    ]
+}
