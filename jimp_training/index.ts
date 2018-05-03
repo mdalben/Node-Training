@@ -1,4 +1,6 @@
 import * as jimp from "jimp";
+import { resolve } from "path";
+import { url } from "inspector";
 const sharp = require("sharp");
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 
@@ -53,7 +55,9 @@ jimp.read("./public/mountains.jpg", (err, image) => {
     } else {
 
         image.getBuffer(`${jimp.AUTO}`, (e, buffer) => {
+            console.log("JIMP READ!")
             console.log(buffer);
+            console.log("-------");
         });
     }
 });
@@ -65,6 +69,7 @@ console.log("jimp read -> " + (t1 - t0) + "ms");
 const t2 = (performance.now());
 
 sharp("./public/mountains.jpg").toBuffer().then((bufferData) => {
+    console.log("BUFFER FILE PATH!");
     const arr = [...bufferData];
     console.log(arr);
 });
@@ -94,11 +99,46 @@ const clients: string[] = ["wgvZS", "T3Ika", "1QPG6", "FxI2z", "MPYma", "DUXC2",
 
 const t7 = performance.now();
 
+var request = require('request').defaults({ encoding: null});
+let urlBuffer;
+request("https://localhost:8045/static/mountains.jpg", (err, res, body) => {
+    if (!err) {
+        sharp(body).toBuffer().then((bufferData) => {
+            console.log("URL IMAGE BUFFER");            
+            const urlBuffer = [...bufferData];
+            console.log(urlBuffer);
+            console.log(`LENGTH: ${urlBuffer.length}`);
+            console.log("------");
+            sharp(bufferData, {width: 100, height: 100}).toFile("./public/small_mountains.png", (err) => {
+                if (err) {
+                    console.log(err);
+                }
+            });
+        });
+    }
+})
 var request = require('request').defaults({ encoding: null });
-request("https://localhost:8045/mou/login", (err, res, body) => {
+request("https://localhost:8045/static/mountains.jpg", (err, res, body) => {
     if (!err) {
         extractImages(clients, body);
     } else console.log(err);
 });
 
 console.log("extract images -> " + (t7 - t6) + "ms");
+
+jimp.read("https://localhost:8045/static/mountains.jpg").then((image) => {
+    image.crop(0, 0, 200, 200)
+        .getBuffer(/*jimp.AUTO.toString()*/jimp.MIME_JPEG, (err, buffer) => {
+            if (err) {
+                console.log(err);
+            } else {
+                const b = [...buffer];
+                console.log("JIMP BUFFER!");
+                b.forEach((byte) => {
+                    console.log(byte);
+                })
+                console.log(`LENGHT: ${b.length}`);
+                resolve(""+ buffer);
+            }
+        })
+});
